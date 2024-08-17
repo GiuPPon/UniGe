@@ -1,0 +1,6 @@
+5
+Roma 2745819
+Milano 1362551
+Napoli 909422
+Torino 836148
+Palermo 627970
