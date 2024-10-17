@@ -123,7 +123,7 @@ bool is_consecutive(lista &l1, lista &l2) {
     return false;
 }
 
-//PARI
+//diSPARI
 
 bool sono_uguali(lista &l1, lista &l2) {
     if (l1 -> head == l2 -> head) {
