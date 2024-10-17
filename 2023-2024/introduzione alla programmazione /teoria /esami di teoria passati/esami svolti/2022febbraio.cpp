@@ -29,17 +29,15 @@ Il prototipo non può essere modificato, ma si possono usare funzioni ausiliarie
 
 int CountOccurrences(int A[], int size, int val) {
     int count = 0;
-    if (A[] == val) {
-        return //?????
-    } else {
 
+    for (int i = 0; i < size; ++i) {
+        if (A[i] == val) {
+            count++;
+        }
     }
     
-    int altriElementi = CountOccurrences(A, size, val);
-    count++;
     return count;
 }
-//???????????????????????????????????????????????????
 
 // ESERCIZIO 3: Consideriamo il tipo di dato “insieme di turisti”
 
