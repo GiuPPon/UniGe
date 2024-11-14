@@ -1,6 +1,6 @@
 #include <iostream>
-#include "arrayy.h"
-#include "listt.h"
+#include "array.h"
+#include "list.h"
 
 bool arrayContainsFibonacciSeries ( const int* arr , unsigned int size ) {
     if (size == 0 || arr == nullptr) {
