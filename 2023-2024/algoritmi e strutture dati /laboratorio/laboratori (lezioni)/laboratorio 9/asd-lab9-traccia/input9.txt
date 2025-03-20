@@ -1,0 +1,5 @@
+3
+A Milano 10 Roma 10
+B Torino 10 Tortona 20 Voghera 10
+C Genova Imperia 20 Upega 10 Genova 10 Imperia 20 Upega 10  
+

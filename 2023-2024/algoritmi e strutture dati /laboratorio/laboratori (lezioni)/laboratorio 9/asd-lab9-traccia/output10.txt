@@ -1,0 +1,54 @@
+Inserire il nome del file da cui leggere i dati
+input10.txt
+
+RIEPILOGO DATI INSERITI:
+
+AB123CD::Tortona 18 Serravalle 50 Genova 27 Varazze ::80
+PQ789RS::Pavia 45 Tortona 20 Voghera 57 Piacenza ::100
+AA100AA::Torino 36 Asti 35 Alessandria 45 Masone 14 Genova ::60
+BB200CC::Albenga 18 Finale 19 Savona 45 Ceva 32 Fossano ::65
+ZZ321YY::Spezia 56 Chiavari 38 Genova ::55
+DD444DD::Casale 32 Alessandria 45 Masone ::60
+EE555FF::Masone 14 Genova 38 Chiavari ::50
+GG111HH::Milano 21 Pavia 45 Tortona 21 Alessandria ::90
+WW333WW::Albenga 18 Finale 19 Savona ::65
+QQ444QQ::Asti 35 Alessandria 21 Tortona ::70
+
+INIZIO SIMULAZIONE:
+AB123CD 0 Tortona
+QQ444QQ 0 Asti
+AA100AA 0 Torino
+EE555FF 0 Masone
+DD444DD 0 Casale
+PQ789RS 0 Pavia
+ZZ321YY 0 Spezia
+BB200CC 0 Albenga
+WW333WW 0 Albenga
+GG111HH 0 Milano
+AB123CD 14 Serravalle
+GG111HH 14 Pavia
+WW333WW 17 Finale
+BB200CC 17 Finale
+EE555FF 17 Genova
+PQ789RS 27 Tortona
+QQ444QQ 30 Alessandria
+DD444DD 32 Alessandria
+WW333WW 34 Savona
+BB200CC 34 Savona
+AA100AA 36 Asti
+PQ789RS 39 Voghera
+GG111HH 44 Tortona
+QQ444QQ 48 Tortona
+AB123CD 51 Genova
+GG111HH 58 Alessandria
+ZZ321YY 61 Chiavari
+EE555FF 62 Chiavari
+AA100AA 71 Alessandria
+AB123CD 71 Varazze
+PQ789RS 73 Piacenza
+BB200CC 76 Ceva
+DD444DD 77 Masone
+ZZ321YY 103 Genova
+BB200CC 105 Fossano
+AA100AA 116 Masone
+AA100AA 130 Genova

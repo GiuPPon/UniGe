@@ -1,0 +1,18 @@
+Inserire il nome del file da cui leggere i dati
+input3.txt
+
+RIEPILOGO DATI INSERITI:
+
+A::Milano 10 Roma ::10
+B::Torino 10 Tortona 20 Voghera ::20
+C::Genova 10 Imperia 20 Upega ::10
+
+INIZIO SIMULAZIONE:
+A 0 Milano
+C 0 Genova
+B 0 Torino
+B 30 Tortona
+C 60 Imperia
+A 60 Roma
+B 90 Voghera
+C 180 Upega

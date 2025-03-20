@@ -1,0 +1,17 @@
+Inserire il nome del file da cui leggere i dati
+input1.txt
+
+RIEPILOGO DATI INSERITI:
+
+AB123CD::Tortona 18 Serravalle 50 Genova 27 Varazze ::80
+PQ789RS::Pavia 45 Tortona 20 Voghera 57 Piacenza ::100
+
+INIZIO SIMULAZIONE:
+AB123CD 0 Tortona
+PQ789RS 0 Pavia
+AB123CD 14 Serravalle
+PQ789RS 27 Tortona
+PQ789RS 39 Voghera
+AB123CD 51 Genova
+AB123CD 71 Varazze
+PQ789RS 73 Piacenza

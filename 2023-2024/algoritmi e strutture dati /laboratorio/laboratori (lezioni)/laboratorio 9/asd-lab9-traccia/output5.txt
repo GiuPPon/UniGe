@@ -1,0 +1,16 @@
+Inserire il nome del file da cui leggere i dati
+input5.txt
+
+RIEPILOGO DATI INSERITI:
+
+A::Milano 10 Roma ::10
+B::Torino 10 Tortona 20 Voghera ::10
+:: ::10
+
+INIZIO SIMULAZIONE:
+A 0 Milano
+ 0
+B 0 Torino
+A 60 Roma
+B 60 Tortona
+B 180 Voghera

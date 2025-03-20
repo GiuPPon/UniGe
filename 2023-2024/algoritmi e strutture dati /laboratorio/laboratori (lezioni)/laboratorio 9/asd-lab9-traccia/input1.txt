@@ -1,0 +1,4 @@
+2
+AB123CD Tortona 18 Serravalle 50 Genova 27 Varazze 80
+PQ789RS Pavia 45 Tortona 20 Voghera 57 Piacenza 100  
+

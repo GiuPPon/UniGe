@@ -1,0 +1,12 @@
+10
+AB123CD Tortona 18 Serravalle 50 Genova 27 Varazze 80
+PQ789RS Pavia 45 Tortona 20 Voghera 57 Piacenza 100
+AA100AA Torino 36 Asti 35 Alessandria 45 Masone 14 Genova 60
+BB200CC Albenga 18 Finale 19 Savona 45 Ceva 32 Fossano 65
+ZZ321YY Spezia 56 Chiavari 38 Genova 55
+DD444DD Casale 32 Alessandria 45 Masone 60
+EE555FF Masone 14 Genova 38 Chiavari 50
+GG111HH Milano 21 Pavia 45 Tortona 21 Alessandria 90
+WW333WW Albenga 18 Finale 19 Savona 65
+QQ444QQ Asti 35 Alessandria 21 Tortona 70
+
