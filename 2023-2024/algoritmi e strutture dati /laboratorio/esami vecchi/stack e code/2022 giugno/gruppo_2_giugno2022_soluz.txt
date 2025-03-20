@@ -1,0 +1,237 @@
+/***********************************************************/
+/* PROVA DI ESAME DI LABORATORIO DI ASD (traccia gruppo 2) */
+/***********************************************************/
+
+// Descrizione:
+// In questo laboratorio si considera il tipo di dato STACK visto a lezione e leggermente 
+// modificato per contenere dei caratteri implementato con la struttura dati lista di puntatori
+
+// scrivere sotto Nome, Cognome e Matricola:
+// NOME: 
+// COGNOME: 
+// MATRICOLA: 
+
+#include <cstdlib>
+#include <iostream>
+#include <string>
+
+using namespace std;
+const char EMPTYCHAR = '$'; // carattere usato per gestire casi di errore; da non usare nelle stringhe e stack di esempio
+
+/***************************/
+/* Stack.h
+/***************************/
+namespace stack {
+   struct cell;
+   typedef cell *Stack;
+   const Stack EMPTYSTACK = nullptr;
+
+   bool isEmpty(const Stack&);
+   void push(const char, Stack&);	/* aggiunge il carattere in cima (operazione safe, si puo' sempre fare) */
+   char pop(Stack&);	            /* toglie dallo stack l'ultimo elemento e lo restituisce; se lo stack e' vuoto 
+                                    viene restituito EMPTYCHAR) */
+   Stack createEmpty();
+}
+
+/***************************/
+/* Stack.cpp
+/***************************/
+// Gli elementi dello STACK sono dei caratteri
+struct stack::cell {
+    char	elem;
+    cell	*next;
+};
+
+
+/****************************************************************/
+bool stack::isEmpty(const Stack& s) {
+    return (s==EMPTYSTACK);
+}
+
+/****************************************************************/
+void stack::push(const char x, Stack& s) {
+    cell *aux = new cell; 
+    aux->elem=x;
+    aux->next=s;
+    s = aux;
+}
+
+/****************************************************************/
+char stack::pop(Stack& s) {
+    if (isEmpty(s)) return EMPTYCHAR;
+    cell* cur=s;
+    s=s->next;
+    char e = cur->elem;
+    delete cur;
+    return e;
+}
+//FUNZIONI AUSILIARIE
+
+//ritorna uno stack vuoto
+stack::Stack stack::createEmpty(){
+    stack::Stack s=stack::EMPTYSTACK;
+    return s;
+}
+
+/****************************************************************/
+/* DESCRIZIONE FUNZIONI DA IMPLEMENTARE
+
+   Sviluppare le seguenti funzioni C/C++:
+
+   1) returnFirstParenthesis(string &str) che analizza una stringa partendo dall'inizio e ritorna la prima parentesi tonda 
+   che trova (aperta o chiusa) e cancella dalla stringa str gli eventuali caratteri precedenti che non sono parentesi tonde 
+   (notare che la stringa str e' passata per riferimento proprio per poterla modificare). 
+   Nel caso non ci siano parentesi tonde in str la funzione dovra' ritornare EMPTYCHAR.
+   Se per esempio str fosse 1+2)+(999) allora la funzione dovra' restituire ')' e str diventare +(999)
+   
+   2) parenthesisArebalanced(string &str) che legge una stringa di caratteri da sinistra verso destra e decide se 
+   le parentesi contenute nella stringa sono bilanciate o no. 
+   Se per esempio str fosse (1+2)+(999) allora la funzione dovra' restituire true
+   Se invece str fosse (()()(() la funzione dovra' restituire false
+   
+   Suggerimento: Partendo da una pila vuota, processiamo le parentesi da sinistra verso destra. 
+   Se un simbolo è una parentesi aperta (usare la funzione  returnFirstParenthesis precedente per recuperare il valore), lo mettiamo sulla pila 
+   come segnale che un simbolo di chiusura corrispondente deve apparire più tardi. Se il simbolo è una parentesi chiusa, 
+   facciamo pop sulla pila. Finché è possibile fare pop sulla pila per trovare una corrispondenza per il simbolo di chiusura, 
+   le parentesi rimangono bilanciate. Se a un certo punto non c’è un simbolo di apertura sulla pila che corrisponde al simbolo 
+   di chiusura che stiamo leggendo in quel momento, la stringa non ha le parentesi bilanciate. Alla fine della stringa, quando 
+   tutti i simboli sono stati processati e abbiamo analizzato una stringha con parentesi bilanciate, la pila dovra' essere vuota.
+   
+   3) countParenthesis(stack::Stack& s) che prende in input uno Stack ed usando le operazioni offerte 
+   dal tipo di dato Stack conta le parentesi tonde aperte e chiuse trovate (e scarta gli altri caratteri) svuotando lo Stack 
+   Se per esempio lo Stack contenesse ( 1 8 + ) ) allora la funzione dovra' restituire il numero 3
+*/
+
+// Questa funzione analizza una stringa partendo dall'inizio e ritorna la prima parentesi tonda che trova 
+// (aperta o chiusa) e cancella dalla stringa str gli eventuali caratteri precedenti che non sono parentesi 
+// tonde (notare che la stringa str e' passata per riferimento proprio per poterla modificare). 
+// Nel caso non ci siano parentesi in str la funzione dovra' ritornare EMPTYCHAR.
+char returnFirstParenthesis(string &str) {
+    for(int i=0; i<str.size(); i++) //ricerco su tutta la stringa una parentesi
+        if(str[i]=='(' || str[i]==')')  //se trovo una parentesi aperta o chiusa
+        {
+            char aux= str[i];   //memorizzo tale parentesi, perchè dovrò modificare la stringa, e verrà dunque eliminata
+            str=str.substr(i+1,str.size()); //sostituisco alla stringa iniziale, ciò che rimane dalla parentesi in poi
+            return aux; //ritorno la parentesi trovata
+        }
+        
+    return EMPTYCHAR;   //se non sono presenti parentesi, ritorno EMPTYCHAR, e la stringa rimane invariata
+}
+
+// Questa funzione legge una stringa di caratteri da sinistra verso destra e decide se 
+// le parentesi contenute nella stringa sono bilanciate o no.
+bool parenthesisArebalanced(string &str) {
+    
+    string toProcess=str;   //stringa ausiliaria su cui fare le operazioni
+    stack::Stack aux=stack::createEmpty();  //creo uno stack vuoto
+    
+    for(int i=0; i<toProcess.size(); i++)   //ciclo su tutta la dimensione della stringa
+        if(toProcess[i]=='(')   //se incontro una parentesi aperta
+            stack::push(returnFirstParenthesis(toProcess), aux);//chiamo la funzione per inserire tale parentesi nello stack
+        else if(toProcess[i]==')')  //se ne incontro una chiusa, rimuovo una parentesi aperta precedentemente inserita
+            if(isEmpty(aux))
+                return false;   //se lo stack è già vuoto e ho trovato una parentesi chiusa, significa che le parentesi non sono bilanciate
+            stack::pop(aux);    //eseguo la pop per rimuovere la parentesi aperta dallo stack
+                
+   
+    return isEmpty(aux);    //se lo stack è vuoto le parentesi sono bilanciate, altrimenti no
+}
+
+// Questa funzione prende in input uno Stack ed usando le operazioni offerte 
+// dal tipo di dato Stack deve contare le parentesi aperte e chiuse trovate 
+int countParenthesis(stack::Stack& s) {
+    char current;   //carattere da analizzare
+    int cont=0;
+    while(!isEmpty(s))  //finchè lo stack non è vuoto eseguo una pop()
+    {
+        current=pop(s); //attribuisco il valore ottenuto a current
+        if(current=='(' || current==')')
+            cont++; //se è una parentesi incremento il contatore
+    }
+            
+    return cont;    //ritorno il contatore
+}
+
+/****************************************************************/
+// MAIN con casi di test
+/****************************************************************/
+
+using namespace stack;
+
+int main() {
+  cout << "****** ESECUZIONE  ****** " << endl;
+  cout << "*** FUNZIONE 1 *** " << endl;
+  string s = "2+(1+1)";
+  if (returnFirstParenthesis(s)=='(' && s == "1+1)")
+      cout << "il caso di test 1 e' PASSATO" << endl;
+  else
+      cout << "il caso di test 1 e' FALLITO" << endl;
+      
+   s ="2+1+)";
+  if (returnFirstParenthesis(s)==')' && s == "")
+      cout << "il caso di test 2 e' PASSATO" << endl;
+  else
+      cout << "il caso di test 2 e' FALLITO" << endl;
+  
+  s ="2+1+";
+  if (returnFirstParenthesis(s)==EMPTYCHAR && s == "")
+      cout << "il caso di test 3 e' PASSATO" << endl;
+  else
+      cout << "il caso di test 3 e' FALLITO" << endl;
+  cout << s << endl;
+
+  s ="";
+  if (returnFirstParenthesis(s)==EMPTYCHAR && s == "")
+      cout << "il caso di test 4 e' PASSATO" << endl;
+  else
+      cout << "il caso di test 4 e' FALLITO" << endl;
+
+      
+  cout << "*** FUNZIONE 2 *** " << endl;
+  s = "((1+2)*3)";   
+  if (parenthesisArebalanced(s))
+      cout << "il caso di test 5 e' PASSATO" << endl;
+  else
+      cout << "il caso di test 5 e' FALLITO" << endl;
+      
+  s = "(2+(1+1)";   
+  if (!parenthesisArebalanced(s))
+      cout << "il caso di test 6 e' PASSATO" << endl;
+  else
+      cout << "il caso di test 6 e' FALLITO" << endl;
+
+  s = ")1+1(";
+  if (!parenthesisArebalanced(s))
+      cout << "il caso di test 7 e' PASSATO" << endl;
+  else
+      cout << "il caso di test 7 e' FALLITO" << endl;
+      
+  s = "";
+  if (parenthesisArebalanced(s))
+      cout << "il caso di test 8 e' PASSATO" << endl;
+  else
+      cout << "il caso di test 8 e' FALLITO" << endl;  
+	      
+  cout << "*** FUNZIONE 3 *** " << endl;
+  Stack myStack = EMPTYSTACK;
+  push('(', myStack); push('1', myStack); push(')', myStack); push(')', myStack);
+  if (countParenthesis(myStack)==3 && isEmpty(myStack))
+      cout << "il caso di test 9 e' PASSATO" << endl;
+  else
+      cout << "il caso di test 9 e' FALLITO" << endl;
+  
+  myStack = EMPTYSTACK;
+  push('1', myStack); push('2', myStack); push('3', myStack);
+   if (countParenthesis(myStack)==0 && isEmpty(myStack))
+      cout << "il caso di test 10 e' PASSATO" << endl;
+  else
+      cout << "il caso di test 10 e' FALLITO" << endl;
+  
+  myStack = EMPTYSTACK;
+   if (countParenthesis(myStack)==0 && isEmpty(myStack))
+      cout << "il caso di test 11 e' PASSATO" << endl;
+  else
+      cout << "il caso di test 11 e' FALLITO" << endl;
+      
+  return 0;
+} 

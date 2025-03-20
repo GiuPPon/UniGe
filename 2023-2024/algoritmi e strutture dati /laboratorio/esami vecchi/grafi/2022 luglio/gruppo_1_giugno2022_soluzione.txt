@@ -1,0 +1,182 @@
+/****************************************************/
+/* PROVA DI ESAME DI LABORATORIO DI ASD (traccia gruppo 1) */
+/****************************************************/
+
+// Descrizione:
+// In questa prova di esame di laboratorio consideriamo le liste circolari semplici viste a lezione (ovvero strutture collegate
+// semplicemente mediante puntatori) i cui elementi sono delle struct (vedere la struct fattura_t nel codice) che contengono
+// alcune informazioni relative ad una fattura (in particolare Id, nome dell'azienda e subtotale dei vari prodotti)
+//
+// ad esempio le informazioni di una fattura potrebbero essere le seguenti:
+// 1, "Polpa Pronta Rica", 40
+//
+// dove 40 rappresenta il subtotale in Euro della fattura 1 intestata all'azienda Polpa Pronta Rica
+
+/**************************************************************/
+/* DESCRIZIONE FUNZIONI DA IMPLEMENTARE
+
+   Sviluppare le seguenti funzioni C/C++:
+
+   1) print_list() che stampa tutte le fatture contenute nella lista senza effettuare nessun ordinamento.
+      Se ad esempio nella lista sono contenute le seguenti 3 celle:
+      {1, "Olio Carli", 100}, {2, "Polpa Pronta Rica", 200}, {3, "Dell cartoni", 300}
+      la funzione dovra' stampare le fattura una per ogni riga andando a capo dopo ogni fattura (ovvero stmapare il seguente testo nell'esempio):
+      1, Olio Carli, 100
+      2, Polpa Pronta Rica, 200
+      3, Dell cartoni, 300
+      FINE
+
+      Alla fine la stampa sarà completata dalla parola FINE. Nel caso la lista sia vuota la funzione dovrà stampare solo FINE.
+
+   2) tail_insert() che inserisce una nuova fattura alla fine della lista
+      Se ad esempio nella lista sono contenute le seguenti 2 celle:
+      {1, "Olio Carli", 100}, {2, "Polpa Pronta Rica", 200}
+      ed aggiungiamo {3, "Dell cartoni", 300} alla fine della lista
+      la lista diventera' la seguente:
+      {1, "Olio Carli", 100}, {2, "Polpa Pronta Rica", 200}, {3, "Dell cartoni", 300}
+
+   3) compute_total() che calcola il totale di tutte le fatture contenute nella lista e ritorna il valore completo di IVA al 22%
+      Se ad esempio nella lista sono contenute le seguenti 2 celle:
+      {1, "Olio Carli", 100}, {2, "Polpa Pronta Rica", 200}
+      la funzione dovra' ritornare il valore 366 (ovvero 300 + il 22% di 300 = 66)
+      Nel caso la lista sia vuota la funzione deve ritornare il valore emptyValue (definito come costante)
+*/
+
+#include <iostream>
+using namespace std;
+
+/****************************************************************/
+// Struct, typedef e const
+/****************************************************************/
+
+struct fattura_t {
+	int id;
+	std::string azienda;
+	float subtotale; // dovrebbe essere  Euro ma per semplicita' usiamo i float
+};
+
+struct cell {
+	fattura_t payload;
+	cell* next;
+};
+
+typedef cell* basic_list;
+
+const basic_list emptyList = NULL;
+const float emptyValue = -1000;
+
+/****************************************************************/
+// Implementazione delle liste circolari semplici
+/****************************************************************/
+
+// Inserisce una nuova cella che contiene la fattura 'new_value' all'inizio della lista (in testa)
+void head_insert(basic_list& list, fattura_t new_value) {
+	cell* aux = new cell;
+	aux->payload = new_value;
+	if (list == emptyList)
+		aux->next = aux;
+	else
+		{cell* tmp = list;
+		 while (tmp->next != list)
+			tmp = tmp->next;
+		tmp->next = aux;
+		aux->next = list;
+		}
+
+    list = aux;
+}
+
+bool isEmpty(basic_list list) {
+    return list == emptyList;
+}
+
+
+// Stampa le fatture contenute nella lista. Nel caso la lista sia vuota la funzione deve stampare solo la stringa FINE
+void print_list(std::ostream& output_stream, basic_list list) {
+    // INSERIRE QUI IL VOSTRO CODICE
+    if(!isEmpty(list)) {    //se la lista non è vuota: entro
+        basic_list aux = list;  //mi creo una variabile d'appoggio per poter scorrere la lista
+        do {    //la prima volta voglio che venga svolto a prescindere
+            std::cout << aux->payload.id << ", " << aux->payload.azienda << ", subtotale " << aux->payload.subtotale << std::endl;  //stampo nel formato richiesto
+            aux = aux->next;    //mi sposto alla cella successiva
+        } while(list != aux);   //se la variabile d'appoggio, che nel frattempo ho spostato, è tornata a puntare alla prima cella della lista, esco
+    }
+    std::cout << "FINE\n";  //fine viene stampato a priori
+}
+
+// Inserisce una nuova cella che contiene la fattura 'new_value' alla fine della lista (cioe' in coda)
+void tail_insert(basic_list& list, fattura_t new_value) {
+    // INSERIRE QUI IL VOSTRO CODICE
+    cell* toInsert = new cell;  //creo nuova cella
+	toInsert->payload = new_value;  //assegno il valore
+    if(isEmpty(list)) { //se è vuota assegno la nuova cella al puntatore della lista e metto next a se stessa
+        toInsert->next = toInsert;
+        list = toInsert;
+        return;
+    }
+    basic_list aux = list;  //creo una variabile ausiliaria per poter scorrere la lista e trovare l'ultima cella, a cui devo attaccare il nuovo blocco
+    while(list != aux->next)    aux = aux->next;   //mi sposto all'ultima cella
+    toInsert->next = list;  //metto next della cella d'aggiungere alla testa della lista
+    aux->next = toInsert;   //aggiungo la nuova cella in coda all'ultimo elemento
+}
+
+// Calcola il totale delle fatture contenute nella lista considerando l'IVA al 22%
+float compute_total(basic_list& list) {
+    // INSERIRE QUI IL VOSTRO CODICE
+    if(isEmpty(list))   return emptyValue;  //se vuota, ritorna emptyvalue
+    basic_list aux = list;  //creo variabile d'appoggio per poter scorrere un array
+    float n = 0;  //variabile in cui conto sommo i valori delle fatture
+    do {    //posso entrare la prima volta prescindere poiché, se sono qui vuol dire che la lista non è vuota
+        n += aux->payload.subtotale;    //sommo man mano il valore delle varie fatture tra di loro
+        aux = aux->next; //mi sposto nella lista
+    } while(list != aux);   //se la variabile d'appoggio, che nel frattempo ho spostato, è tornata a puntare alla prima cella della lista, esco
+    n = n + (n*22)/100; //calcolo e aggiungo l'iva
+    return n;
+}
+
+/****************************************************************/
+// MAIN con casi di test
+/****************************************************************/
+int main(int argc, char* argv[]) {
+    // definiamo una lista
+	basic_list my_list = emptyList;
+	// definiamo due fatture f1 e f2
+	fattura_t f1 = {2, "Olio Carli", 100};
+	fattura_t f2 = {1, "Polpa Pronta Rica", 50};
+	// inseriamo f1 e f2 nella lista usando head_insert() (in testa)
+	head_insert(my_list, f1);
+	head_insert(my_list, f2);
+
+	cout << "****** ESECUZIONE  ****** " << endl;
+	cout << "*** FUNZIONE 1 *** " << endl;
+	// stampiamo la lista
+	cout << "* INIZIO STAMPA *" << endl;
+	print_list(cout, my_list);
+	cout << "* FINE STAMPA *" << endl;
+	cout << "\nLa tua funzione 1 e' corretta se subito sopra, tra INIZIO STAMPA e FINE STAMPA, ha stampato: " << endl;
+	cout << "1, Polpa Pronta Rica, subtotale 50" << endl;
+    cout << "2, Olio Carli, subtotale 100" << endl;
+    cout << "FINE" << endl;
+
+	// definiamo una nuova fattura f3
+    fattura_t f3 = {3, "Dell cartoni", 150};
+	// inseriamo f3 nella lista usando tail_insert() (in coda)
+    tail_insert(my_list, f3);
+    cout << "\n*** FUNZIONE 2 *** " << endl;
+	// stampiamo la lista
+	cout << "* INIZIO STAMPA *" << endl;
+	print_list(cout, my_list);
+	cout << "* FINE STAMPA *" << endl;
+	cout << "\nLa tua funzione 2 e' corretta se subito sopra, tra INIZIO STAMPA e FINE STAMPA, ha stampato: " << endl;
+	cout << "1, Polpa Pronta Rica, subtotale 50" << endl;
+    cout << "2, Olio Carli, subtotale 100" << endl;
+    cout << "3, Dell cartoni, subtotale 150" << endl;
+    cout << "FINE" << endl;
+
+    cout << "\n*** FUNZIONE 3 *** " << endl;
+    if (compute_total(my_list) == 366)
+      cout << "il caso di test e' PASSATO" << endl;
+    else
+      cout << "il caso di test e' FALLITO" << endl;
+    return 0;
+}

@@ -1,0 +1,43 @@
+[
+    {
+        "test_description": "stampa in ordine inverso",
+        "input": "dati.txt a",
+        "in_stdout": "67 42 6 5 3 2 2 1 -9 -9"
+    },
+
+    {
+        "test_description": "riconoscere un elemento duplicato",
+        "input": "dati.txt b 2",
+        "stdout": "vero\n"
+    },
+
+    {
+        "test_description": "non dare per duplicato un elemento unico",
+        "input": "dati.txt b 42",
+        "stdout": "falso\n"
+    },
+
+    {
+        "test_description": "non dare per duplicato un elemento assente",
+        "input": "dati.txt b 4",
+        "stdout": "falso\n"
+    },
+
+    {
+        "test_description": "somma di zero elementi",
+        "input": "dati.txt c 100",
+        "stdout": "0\n"
+    },
+
+    {
+        "test_description": "somma con caso al limite",
+        "input": "dati.txt c 42",
+        "stdout": "67\n"
+    },
+
+    {
+        "test_description": "somma di tutti i valori",
+        "input": "dati.txt c -20",
+        "stdout": "110\n"
+    }
+]
