@@ -4,6 +4,8 @@
 /* Funzione da implementare                      */
 /*************************************************/
 
+// NON COMPLETO !!!
+
 // uso la funzione dell'esercizio due come ausiliaria
 bool isPresent(const dhash_table& dht,Elem e){
   cell *cur = dht.T1[h1(e)];
