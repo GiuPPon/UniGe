@@ -1,0 +1,210 @@
+Malchiodi Riccardo          5680500
+Ponassi Giulia              6145273
+Sandu Andrei                6483324
+
+
+TEST DEL PDF
+
+
+cd foo 
+
+scopo: cambia la directory di lavoro (change_current_directory)
+situazione iniziale: directory iniziale (cartella microbash), dove esiste la directory foo
+linea inviata alla microbash: cd foo 
+risultato: 
+    cambio della directory
+
+
+cd foo bar
+
+scopo: assicurarsi che il comando cd produca un errore se chiamato con più di un argomento (check_cd) 
+situazione iniziale: nessuna condizione specifica
+linea inviata alla microbash: cd foo bar
+risultato: 
+    Error: cd command must have only one argument
+
+
+cd foo <bar
+
+scopo: assicurarsi che il comando cd produca un errore in quanto non supporta la redirezione (check_cd)
+situazione iniziale: nessuna condizione specifica
+linea inviata alla microbash: cd foo <bar
+risultato:
+    Error: cd command cannot have I/O redirections
+
+
+ls | cd foo
+
+scopo: assicurarsi che il comando cd produca un errore se vengono usati più comandi nella stessa linea (check_cd)
+situazione iniziale: nessuna condizione specifica
+linea inviata alla microbash: ls | cd foo
+risultato: 
+    Error: cd command must be the only command of the line
+
+
+ls -l | grep foo >bar
+
+scopo: filtra l’elenco dei file tenendo solo le linee che contengono la stringa “foo” e scrive il 
+risultato nel file “bar”
+situazione iniziale: directory iniziale (cartella microbash), dove esiste la directory foo
+linea inviata alla microbash: ls -l | grep foo >bar
+risultato: 
+    creazione di bar, all'interno: 
+        drwxrwxrwx 1 (ossia la posizione di foo) *user* *user*   4096 *month* *day* *hour:min* foo
+
+
+ls -l | grep foo > bar
+
+scopo:  non è specificato il file per la redirezione dello standard output (c’è uno spazio fra > e bar) (parse_cmd)
+situazione iniziale: nessuna condizione specifica
+linea inviata alla microbash: ls -l | grep foo > bar
+risultato: 
+    Parsing error: no path specified for output redirection
+
+
+ls | grep foo <bar | wc -l
+
+scopo: solo il primo comando può avere la redirezione dell’input (check_redirections)
+situazione iniziale: nessuna condizione specifica
+linea inviata alla microbash: ls | grep foo <bar | wc -l
+risultato:
+    Error: Only the first command of a line can have input-redirection
+
+
+cat /proc/cpuinfo | grep processor | wc -l
+
+scopo: conta il numero di processori (core) presenti nel sistema
+situazione iniziale: nessuna condizione specifica
+linea inviata alla microbash: cat /proc/cpuinfo | grep processor | wc -l
+risultato:
+    4 (numero dei core, nel nostro caso 4)
+
+
+cat </proc/cpuinfo | grep processor | wc -l
+
+scopo: come il precedente, ma stavolta cat legge da standard input (che `e stato rediretto)
+situazione iniziale: nessuna condizione specifica
+linea inviata alla microbash: cat </proc/cpuinfo | grep processor | wc -l
+risultato:
+    4 (numero dei core, nel nostro caso 4)
+
+
+echo a $XYZ b
+
+scopo: verificare che la shell “espanda” le variabili di ambiente non esistenti in stringhe vuote (parse_cmd)
+situazione iniziale: un ambiente in cui la variabile XYZ non esiste
+linea inviata alla microbash: echo a $XYZ b
+risultato: 
+    a  b (in quanto se la variabile non è esistente, "assegniamo a temp una stringa vuota per evitare di avere un puntatore nullo")
+
+
+echo a $XYZ b
+
+scopo: verificare che la shell espanda correttamente le variabili di ambiente (definite) (parse_cmd)
+situazione iniziale: ambiente in cui XYZ è uguale a pippo (al momento dell'esecuzione, definisco la variabile scrivendo " XYZ=pippo ./microbash ")
+linea inviata alla microbash: echo a $XYZ b
+risultato: 
+    a pippo b
+    
+
+TEST FATTI DA NOI
+
+
+echo a $ b
+
+scopo: verificare se la variabile è specificata (parse_cmd)
+situazione iniziale: nessuna condizione specifica
+linea inviata alla microbash: echo a $ b
+risultato: 
+    Parsing error: environment variable is not specified
+
+
+echo "Hello, world" >output.txt
+
+scopo: controllare la funzione check_redirections (output) e redirect
+situazione iniziale: nessuna condizione specifica
+linea inviata alla microbash: echo "Hello, world" >output.txt
+risultato: 
+    creazione di output.txt se non presente, con scritto "Hello, world"
+
+
+echo "Hi" > output.txt
+
+scopo: controllare la funzione check_redirections (errore per lo spazio)
+situazione iniziale: nessuna condizione specifica
+linea inviata alla microbash: echo "Hi" > output.txt
+risultato: 
+    Parsing error: no path specified for output redirection 
+
+
+cat <input.txt
+
+scopo: controllare la funzione check_redirections (input)
+situazione iniziale: nessuna condizione specifica
+linea inviata alla microbash: cat <input.txt
+risultato: 
+    *contenuto di input.txt*
+
+
+echo "Hello" >output.txt | cat 
+
+scopo: controllare la funzione check_redirections quando output non è finale
+situazione iniziale: nessuna condizione specifica
+linea inviata alla microbash: echo "Hello" >output.txt | cat
+risultato:
+    Error: Only the last command of a line can have output-redirection
+
+
+echo "Hello" | cat <input.txt
+
+scopo: controllare la funzione check_redirections quando input non è iniziale
+situazione iniziale: nessuna condizione specifica
+linea inviata alla microbash: echo "Hello" | cat <input.txt
+risultato:
+    Error: Only the first command of a line can have input-redirection
+
+
+echo >output.txt >input.txt
+
+scopo: controllare la funzione check_redirections
+situazione iniziale: nessuna condizione specifica
+linea inviata alla microbash: echo >output.txt >input.txt
+risultato:
+    Parsing error: cannot have more than one output redirection
+
+
+echo "Hello" >input.txt
+
+scopo: controllare la funzione check_redirections e execute_line
+situazione iniziale: input.txt in modalità read-only
+linea inviata alla microbash: echo "Hello" >input.txt
+risultato:
+    Error in opening the output file: Permission denied
+
+
+ls -l
+
+scopo: controllare che run_child funzioni
+situazione iniziale: nessuna condizione specifica
+linea inviata alla microbash: ls -l
+risultato:
+    *contenuto della directory corrente*
+
+
+nonesistente
+
+scopo: eseguo un comando inesistente (wait_for_children)
+situazione iniziale: nessuna condizione specifica
+linea inviata alla microbash: nonesistente
+risultato:
+    execvp failed: No such file or directory
+    Process PID: *numero pid*, exited with: *numero > 0*
+
+
+kill *pid del figlio*
+
+scopo: controllare che wait_for_children funzioni in caso di figlio ucciso da segnale
+situazione iniziale: processo (esempio cat) in esecuzione in un altro terminale
+linea inviata alla microbash: kill *pid del figlio*
+risultato:
+    process PID: *numero pid*, was terminated by signal: *numero > 0* Terminated
